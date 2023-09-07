@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Search from "./Component/Search/Search";
 import Weather from "./Component/Weather/Weather";
+import DataWeather from "./Component/DataWeather/DataWeather";
 import DataWeatherDaily from "./Component/DataWeatherDaily/DataWeatherDaily";
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
-  const [cityName, setCityName] = useState("");
-  const apiKey = "f6b52f57a593db891de1e68163d24c73";
+  const [cityName, setCityName] = useState(""); // Default to an empty string
+  const apiKey = "f6b52f57a593db891de1e68163d24c73"; // Updated OpenWeatherMap API key
   const [userLocation, setUserLocation] = useState(null);
-  const [allowLocation, setAllowLocation] = useState(false);
-  const defaultCity = "Cambodia";
+  const [allowLocation, setAllowLocation] = useState(false); // Track if user allows location
+  const defaultCity = "Cambodia"; // Default city name if geolocation is denied
 
   useEffect(() => {
     // Fetch weather data when the cityName changes
@@ -94,7 +95,7 @@ function App() {
             visibility={weatherData.list[0].visibility}
             userLocation={userLocation}
           />
-
+          <DataWeather weatherData={weatherData} />
           <br />
           <DataWeatherDaily
             weatherData={weatherData}
