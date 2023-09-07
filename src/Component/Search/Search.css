@@ -1,0 +1,32 @@
+.wrapper-search {
+  background-color: transparent;
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-box {
+  padding: 10px 300px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  color: black;
+}
+.search-box::-webkit-input-placeholder {
+  text-align: center;
+}
+input[type="text"] {
+  text-align: center;
+}
+/* Responsive Time */
+@media only screen and (max-width: 800px) {
+  .search-box {
+    padding: 12px 200px;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .search-box {
+    padding: 12px 80px;
+  }
+}

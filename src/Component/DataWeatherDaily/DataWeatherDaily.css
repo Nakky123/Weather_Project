@@ -1,0 +1,11 @@
+.data-show-holder {
+  display: inline-block;
+  align-items: center;
+  text-align: center;
+  margin: 20px;
+}
+.data-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 30px;
+}
