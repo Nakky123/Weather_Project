@@ -5,7 +5,7 @@ const DataWeather = ({ weatherData }) => {
   // Filter the data for the next 2 days (48 hours)
   const currentDate = new Date();
   const days = new Date(currentDate);
-  days.setDate(currentDate.getDate() + 1);
+  days.setDate(currentDate.getDate() + 2);
 
   const filteredData = weatherData.list.filter((forecast) => {
     const forecastDate = new Date(forecast.dt * 1000);
