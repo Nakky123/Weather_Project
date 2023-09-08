@@ -1,32 +1,43 @@
 import React, { useState } from "react";
 import "./Search.css";
+import cityData from "../../../city_data.json";
+import Select from "react-select";
+
 const Search = ({ onSearch }) => {
   const [searchValue, setSearchValue] = useState("");
+  const [filteredCities, setFilteredCities] = useState([]);
 
-  const handleInputChange = (event) => {
-    setSearchValue(event.target.value);
+  const options = cityData.map((city) => ({
+    label: city.name,
+    value: city.name,
+  }));
+
+  const handleInputChange = (inputValue) => {
+    setSearchValue(inputValue);
+
+    // Filter city options based on the search input
+    const filteredOptions = options.filter(
+      (option) =>
+        option.label.toLowerCase().includes(inputValue.toLowerCase()) &&
+        inputValue.length >= 3
+    );
+    setFilteredCities(filteredOptions);
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      onSearch(searchValue);
-      setSearchValue("");
-    }
+  const handleCitySelect = (selectedOption) => {
+    setSearchValue(selectedOption.label);
+    onSearch(selectedOption.label);
   };
 
   return (
-    <div className="wrapper-search">
-      <div className="right-item-search">
-        <input
-          type="text"
-          placeholder="Search"
-          className="search-box"
-          value={searchValue}
-          onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
-        />
-      </div>
-    </div>
+    <Select
+      options={filteredCities}
+      value={searchValue}
+      onInputChange={handleInputChange}
+      onChange={handleCitySelect}
+      placeholder="Search for a city"
+      isSearchable
+    />
   );
 };
 
