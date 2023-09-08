@@ -39,7 +39,7 @@ const DataShowHolder = ({ dailyForecast }) => {
   const dateObj = new Date(firstForecast.dt * 1000);
   const dayOfWeek = dateObj
     .toLocaleDateString("en-US", { weekday: "long" })
-    .replace(/\b\w/g, (l) => l.toUpperCase()); // Capitalize the first letter of each word
+    .replace(/\b\w/g, (l) => l.toUpperCase());
 
   const dayOfMonth = dateObj.getDate();
 

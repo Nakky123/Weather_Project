@@ -12,32 +12,45 @@ const DataShowHolder = ({ iconCode, additionalContent }) => {
   let iconUrl;
 
   const weatherIconMap = {
-    "01d": "clear_day",
-    "02d": "party_cloudy_day",
-    "03d": "cloud",
-    "04d": "cloud",
-    "09d": "rain",
-    "10d": "rain",
-    "11d": "thunderstorm",
-    "13d": "snow",
-    "50d": "fog",
+    "01d": clear_day,
+    "01n": clear_day,
+    "02d": party_cloudy_day,
+    "02n": party_cloudy_day,
+    "03d": cloud,
+    "03n": cloud,
+    "04d": cloud,
+    "04n": cloud,
+    "09d": rain,
+    "09n": rain,
+    "10d": rain,
+    "10n": rain,
+    "11d": thunderstorm,
+    "11n": thunderstorm,
+    "13d": snow,
+    "13n": snow,
+    "50d": fog,
+    "50n": fog,
   };
 
   if (weatherIconMap[iconCode]) {
-    if (iconCode === "09d" || iconCode === "10d") {
+    if (iconCode === "09d" || iconCode === "09n") {
       iconUrl = rain;
-    } else if (iconCode === "03d" || iconCode === "04d") {
+    } else if (iconCode === "03d" || iconCode === "03n") {
       iconUrl = cloud;
-    } else if (iconCode === "11d") {
+    } else if (iconCode === "11d" || iconCode === "11n") {
       iconUrl = thunderstorm;
-    } else if (iconCode === "01d") {
+    } else if (iconCode === "01d" || iconCode === "01n") {
       iconUrl = clear_day;
-    } else if (iconCode === "02d") {
+    } else if (iconCode === "02d" || iconCode === "02n") {
       iconUrl = party_cloudy_day;
-    } else if (iconCode === "13d") {
+    } else if (iconCode === "13d" || iconCode === "13n") {
       iconUrl = snow;
-    } else if (iconCode === "13d") {
+    } else if (iconCode === "50d" || iconCode === "50n") {
       iconUrl = fog;
+    } else if (iconCode === "04d" || iconCode === "04n") {
+      iconUrl = cloud;
+    } else if (iconCode === "10d" || iconCode === "10n") {
+      iconUrl = rain;
     } else {
       iconUrl = rain;
     }
@@ -82,8 +95,8 @@ const Weather = ({
       <p className="weather-show">{capitalizedDescription}</p>
       <div className="weather-show-2">
         <p>Feels like: {feelsLike}°C</p>
-        <p>Wind: {windSpeed} m/s</p>
-        {/* <p>Visibility: {visibility}m</p> */}
+        <p>Wind : {windSpeed} m/s</p>
+        <p>Visibility: {visibility / 1000} Km</p>
       </div>
     </div>
   );
