@@ -22,7 +22,9 @@
   scrollbar-color: #ccc #fff;
   max-width: 100%;
   padding-top: 40px;
-  padding-right: 200px;
+}
+.data-show-container-2 {
+  padding-right: 187px;
 }
 
 .data-show-holder {
