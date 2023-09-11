@@ -8,7 +8,7 @@ const DataWeatherDaily = ({ weatherData }) => {
   return (
     <div className="data-wrapper">
       <h2 className="daily">Daily</h2>
-      <div className="data-show-container">
+      <div className="data-show-container data-show-container-2">
         {groupedData.map((dailyForecast, index) => (
           <DataShowHolder key={index} dailyForecast={dailyForecast} />
         ))}

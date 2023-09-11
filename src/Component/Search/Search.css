@@ -1,9 +1,10 @@
 .css-b62m3t-container {
-  width: 40%;
+  max-width: 800px;
   margin: 0 auto;
   border-radius: 30px;
   border-radius: 40px;
   outline: none;
+  padding-top: 20px;
 }
 @media only screen and (max-width: 800px) {
   .css-b62m3t-container {
