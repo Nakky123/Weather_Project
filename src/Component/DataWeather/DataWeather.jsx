@@ -48,7 +48,7 @@ const DataShowHolder = ({ forecast }) => {
       <p>{timeDifference < 0 ? "Now" : formatTime(hours, minutes)}</p>
       <p>
         <img src={iconUrl} alt="Weather Icon" />
-        <p>{forecast.main.temp}°C</p>
+        <p>{Math.round(forecast.main.temp)}°C</p>
         <p>{forecast.weather[0].description}</p>
       </p>
     </div>

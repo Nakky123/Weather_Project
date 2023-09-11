@@ -46,7 +46,9 @@
     font-size: 35px;
   }
   .weather-show-2 {
-    display: flex;
+    display: grid;
+    gap: 0;
+    text-align: center;
   }
   .weather-holder {
     gap: 0;
@@ -55,6 +57,5 @@
   .weather-show {
     font-size: 25px;
     font-weight: bold;
-    padding-bottom: 20px;
   }
 }

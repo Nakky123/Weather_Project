@@ -90,12 +90,12 @@ const Weather = ({
           iconCode={iconCode}
           additionalContent={additionalContent}
         />
-        <span className="weather-c">{temperature}°C</span>
+        <span className="weather-c">{Math.round(temperature)}°C</span>
       </div>
       <p className="weather-show">{capitalizedDescription}</p>
       <div className="weather-show-2">
-        <p>Feels like: {feelsLike}°C</p>
-        <p>Wind : {windSpeed} m/s</p>
+        <p>Feels like: {Math.round(feelsLike)}°C</p>
+        <p>Wind : {Math.round(windSpeed)} m/s</p>
         <p>Visibility: {visibility / 1000} Km</p>
       </div>
     </div>
