@@ -95,7 +95,7 @@ const Weather = ({
       <p className="weather-show">{capitalizedDescription}</p>
       <div className="weather-show-2">
         <p>Feels like: {Math.round(feelsLike)}°C</p>
-        <p>Wind : {Math.round(windSpeed)} m/s</p>
+        <p>Wind : {Math.round(windSpeed) * 3.6} km/h</p>
         <p>Visibility: {visibility / 1000} Km</p>
       </div>
     </div>

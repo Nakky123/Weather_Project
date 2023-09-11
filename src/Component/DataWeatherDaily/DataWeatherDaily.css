@@ -6,7 +6,7 @@
 }
 .data-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   gap: 30px;
 }
 .daily {
@@ -25,9 +25,8 @@
   padding-top: 40px;
 }
 .data-show-container-2 {
-  padding-right: 207px;
+  padding-left: 20px;
 }
-
 .data-show-holder {
   display: inline-block;
   align-items: center;
