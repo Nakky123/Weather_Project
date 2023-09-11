@@ -19,6 +19,7 @@
 @media only screen and (max-width: 768px) {
   .data-show-container {
     display: flex;
+    font-size: 15px;
     flex-wrap: nowrap;
     overflow-x: auto;
     white-space: nowrap;
@@ -42,6 +43,6 @@
   }
   .data-wrapper {
     display: grid;
-    width: 95%;
+    width: 99%;
   }
 }

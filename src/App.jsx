@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Search from "./Component/Search/Search";
 import Weather from "./Component/Weather/Weather";
 import DataWeather from "./Component/DataWeather/DataWeather";
@@ -6,23 +7,21 @@ import DataWeatherDaily from "./Component/DataWeatherDaily/DataWeatherDaily";
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
-  const [cityName, setCityName] = useState(""); // Default to an empty string
-  const apiKey = "f6b52f57a593db891de1e68163d24c73"; // Updated OpenWeatherMap API key
+  const [cityName, setCityName] = useState("");
+  const apiKey = "f6b52f57a593db891de1e68163d24c73";
   const [userLocation, setUserLocation] = useState(null);
-  const [allowLocation, setAllowLocation] = useState(false); // Track if user allows location
-  const defaultCity = "Cambodia"; // Default city name if geolocation is denied
+  const [allowLocation, setAllowLocation] = useState(false);
+  const defaultCity = "Cambodia";
 
   useEffect(() => {
-    // Fetch weather data when the cityName changes
     async function fetchWeatherData() {
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}&units=metric`
         );
 
-        if (response.ok) {
-          const data = await response.json();
-          setWeatherData(data);
+        if (response.status === 200) {
+          setWeatherData(response.data);
         } else {
           console.error("Failed to fetch weather data");
         }
@@ -34,7 +33,6 @@ function App() {
     fetchWeatherData();
   }, [cityName, apiKey]);
 
-  // Define the search function to update cityName
   const handleSearch = (newCityName) => {
     setCityName(newCityName);
   };
@@ -42,7 +40,6 @@ function App() {
   useEffect(() => {
     // Fetch user's current location if they allow it
     if (!allowLocation && "geolocation" in navigator) {
-      // Prompt the user to allow location
       const allowGeoLocation = window.confirm(
         "To get weather information for your current location, please allow access to your location."
       );
@@ -57,13 +54,12 @@ function App() {
               longitude: position.coords.longitude,
             });
 
-            // Set the default city to the user's location
-            fetch(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`
-            )
-              .then((response) => response.json())
-              .then((data) => {
-                setCityName(data.name);
+            axios
+              .get(
+                `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`
+              )
+              .then((response) => {
+                setCityName(response.data.name);
               })
               .catch((error) => {
                 console.error("Error fetching user's location data", error);
@@ -79,6 +75,22 @@ function App() {
       }
     }
   }, [apiKey, allowLocation, defaultCity]);
+
+  useEffect(() => {
+    // Fetch user's IP address if they allow it
+    if (!userLocation && allowLocation) {
+      axios
+        .get("https://api.ipify.org?format=json")
+        .then((response) => {
+          const userIPAddress = response.data.ip;
+          console.log("User's IP Address:", userIPAddress);
+          // You can store the IP address or use it as needed in your application.
+        })
+        .catch((error) => {
+          console.error("Error fetching user's IP address", error);
+        });
+    }
+  }, [allowLocation, userLocation]);
 
   return (
     <>

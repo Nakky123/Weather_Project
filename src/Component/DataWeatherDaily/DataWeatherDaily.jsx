@@ -50,7 +50,7 @@ const DataShowHolder = ({ dailyForecast }) => {
       </p>
       <p>
         <img src={iconUrl} alt="Weather Icon" />
-        <p>{firstForecast.main.temp}°C</p>
+        <p>{Math.round(firstForecast.main.temp)}°C</p>
         <p>{firstForecast.weather[0].description}</p>
       </p>
     </div>
