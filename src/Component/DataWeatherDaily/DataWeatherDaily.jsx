@@ -2,56 +2,53 @@ import React from "react";
 import "./DataWeatherDaily.css";
 
 const DataWeatherDaily = ({ weatherData }) => {
-  // Group the data by date to get daily forecasts
-  const groupedData = groupDataByDate(weatherData.list);
+  // Filter and group the data to show data every 8 data points (3 hours)
+  const filteredData = filterDataEvery8Hours(weatherData.list);
 
   return (
     <div className="data-wrapper">
       <h2 className="daily">Daily</h2>
       <div className="data-show-container data-show-container-2">
-        {groupedData.map((dailyForecast, index) => (
-          <DataShowHolder key={index} dailyForecast={dailyForecast} />
+        {filteredData.map((forecast, index) => (
+          <DataShowHolder key={index} forecast={forecast} />
         ))}
       </div>
     </div>
   );
 };
 
-// Helper function to group data by date
-const groupDataByDate = (dataList) => {
-  const groupedData = {};
-  dataList.forEach((forecast) => {
-    const date = new Date(forecast.dt * 1000).toLocaleDateString("en-US");
-    if (!groupedData[date]) {
-      groupedData[date] = [];
-    }
-    groupedData[date].push(forecast);
-  });
-
-  return Object.values(groupedData);
+// Helper function to filter data every 8 data points (3 hours)
+const filterDataEvery8Hours = (dataList) => {
+  const filteredData = [];
+  for (let i = 0; i < dataList.length; i += 8) {
+    filteredData.push(dataList[i]);
+  }
+  return filteredData;
 };
 
-const DataShowHolder = ({ dailyForecast }) => {
-  const firstForecast = dailyForecast[0];
-  const iconCode = firstForecast.weather[0].icon;
+const DataShowHolder = ({ forecast }) => {
+  const iconCode = forecast.weather[0].icon;
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
 
-  const dateObj = new Date(firstForecast.dt * 1000);
+  const dateObj = new Date(forecast.dt * 1000);
   const dayOfWeek = dateObj
     .toLocaleDateString("en-US", { weekday: "long" })
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
-  const dayOfMonth = dateObj.getDate();
+  const date = dateObj.toLocaleDateString("en-US", {
+    day: "numeric",
+  });
 
   return (
     <div className="data-show-holder">
       <p>
-        {dayOfWeek} {dayOfMonth}
+        {dayOfWeek} {date}
       </p>
+
       <p>
         <img src={iconUrl} alt="Weather Icon" />
-        <p>{Math.round(firstForecast.main.temp)}°C</p>
-        <p>{firstForecast.weather[0].description}</p>
+        <p>{Math.round(forecast.main.temp)}°C</p>
+        <p>{forecast.weather[0].description}</p>
       </p>
     </div>
   );

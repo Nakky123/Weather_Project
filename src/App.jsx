@@ -11,7 +11,7 @@ function App() {
   const apiKey = "f6b52f57a593db891de1e68163d24c73";
   const [userLocation, setUserLocation] = useState(null);
   const [allowLocation, setAllowLocation] = useState(false);
-  const defaultCity = "Cambodia";
+  const defaultCity = "Kingdom of Cambodia";
   const [currentLocation, setCurrentLocation] = useState("");
 
   useEffect(() => {
