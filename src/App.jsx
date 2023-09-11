@@ -12,6 +12,7 @@ function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [allowLocation, setAllowLocation] = useState(false);
   const defaultCity = "Cambodia";
+  const [currentLocation, setCurrentLocation] = useState("");
 
   useEffect(() => {
     async function fetchWeatherData() {
@@ -59,7 +60,16 @@ function App() {
                 `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`
               )
               .then((response) => {
-                setCityName(response.data.name);
+                if (response.status === 200) {
+                  setCityName(response.data.name);
+                  setCurrentLocation({
+                    // Update currentLocation with latitude and longitude
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                  });
+                } else {
+                  console.error("Failed to fetch weather data");
+                }
               })
               .catch((error) => {
                 console.error("Error fetching user's location data", error);
@@ -70,7 +80,7 @@ function App() {
           }
         );
       } else {
-        // User clicked cancel, set the default city
+        //clicked cancel, set the default city
         setCityName(defaultCity);
       }
     }
@@ -91,6 +101,8 @@ function App() {
         });
     }
   }, [allowLocation, userLocation]);
+
+  console.log(currentLocation);
 
   return (
     <>
