@@ -30,14 +30,16 @@ const Search = ({ onSearch }) => {
   };
 
   return (
-    <Select
-      options={filteredCities}
-      value={searchValue}
-      onInputChange={handleInputChange}
-      onChange={handleCitySelect}
-      placeholder="Search for a city"
-      isSearchable
-    />
+    <div>
+      <Select
+        options={filteredCities}
+        value={searchValue}
+        onInputChange={handleInputChange}
+        onChange={handleCitySelect}
+        placeholder="Search for a city"
+        isSearchable
+      />
+    </div>
   );
 };
 

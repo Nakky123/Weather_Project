@@ -7,8 +7,9 @@ import DataWeatherDaily from "./Component/DataWeatherDaily/DataWeatherDaily";
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
+  const [hourlyWeatherData, setHourlyWeatherData] = useState(null);
   const [cityName, setCityName] = useState("");
-  const apiKey = "f6b52f57a593db891de1e68163d24c73";
+  const apiKey = "b55ebdc22b904e591303fa9ae71ebea6";
   const [userLocation, setUserLocation] = useState(null);
   const [allowLocation, setAllowLocation] = useState(false);
   const defaultCity = "Kingdom of Cambodia";
@@ -32,6 +33,26 @@ function App() {
     }
 
     fetchWeatherData();
+  }, [cityName, apiKey]);
+
+  useEffect(() => {
+    async function fetchHourlyWeatherData() {
+      try {
+        const hourlyResponse = await axios.get(
+          `https://pro.openweathermap.org/data/2.5/forecast/hourly?q=${cityName}&appid=${apiKey}&units=metric`
+        );
+
+        if (hourlyResponse.status === 200) {
+          setHourlyWeatherData(hourlyResponse.data);
+        } else {
+          console.error("Failed to fetch hourly weather data");
+        }
+      } catch (error) {
+        console.error("Error fetching hourly weather data", error);
+      }
+    }
+
+    fetchHourlyWeatherData();
   }, [cityName, apiKey]);
 
   const handleSearch = (newCityName) => {
@@ -63,7 +84,6 @@ function App() {
                 if (response.status === 200) {
                   setCityName(response.data.name);
                   setCurrentLocation({
-                    // Update currentLocation with latitude and longitude
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                   });
@@ -80,34 +100,16 @@ function App() {
           }
         );
       } else {
-        //clicked cancel, set the default city
         setCityName(defaultCity);
       }
     }
   }, [apiKey, allowLocation, defaultCity]);
-
-  useEffect(() => {
-    // Fetch user's IP address if they allow it
-    if (!userLocation && allowLocation) {
-      axios
-        .get("https://api.ipify.org?format=json")
-        .then((response) => {
-          const userIPAddress = response.data.ip;
-          console.log("User's IP Address:", userIPAddress);
-          // You can store the IP address or use it as needed in your application.
-        })
-        .catch((error) => {
-          console.error("Error fetching user's IP address", error);
-        });
-    }
-  }, [allowLocation, userLocation]);
-
-  console.log(currentLocation);
+  console.log("Hourly Weather Data:", hourlyWeatherData);
 
   return (
     <>
       <Search onSearch={handleSearch} />
-      {weatherData && (
+      {weatherData && hourlyWeatherData && (
         <>
           <Weather
             city={cityName}
@@ -119,7 +121,7 @@ function App() {
             visibility={weatherData.list[0].visibility}
             userLocation={userLocation}
           />
-          <DataWeather weatherData={weatherData} />
+          <DataWeather hourlyWeatherData={hourlyWeatherData} />
           <br />
           <DataWeatherDaily
             weatherData={weatherData}

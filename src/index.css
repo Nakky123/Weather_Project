@@ -10,7 +10,13 @@ body {
   background-size: cover;
   background-attachment: fixed;
 }
+:root {
+  --color-black: black;
+  --small-text: 15px;
+  --paragraphM: 14px;
+}
+
 * {
-  color: black;
+  color: var(--color-black);
   font-family: "Roboto", sans-serif;
 }
