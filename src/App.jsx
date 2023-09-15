@@ -10,11 +10,12 @@ function App() {
   const [currentWeather, setCurrentWeather] = useState(null);
   const [hourlyWeatherData, setHourlyWeatherData] = useState(null);
   const [cityName, setCityName] = useState("");
-  const apiKey = "b55ebdc22b904e591303fa9ae71ebea6";
+  const [apiKey, setApiKey] = useState("b55ebdc22b904e591303fa9ae71ebea6");
   const [userLocation, setUserLocation] = useState(null);
   const [allowLocation, setAllowLocation] = useState(false);
-  const defaultCity = "Kingdom of Cambodia";
+  const [defaultCity] = useState("Kingdom of Cambodia");
   const [currentLocation, setCurrentLocation] = useState("");
+  const [searchHistory, setSearchHistory] = useState([]);
 
   useEffect(() => {
     async function fetchWeatherData() {
@@ -59,13 +60,14 @@ function App() {
   const handleSearch = async (newCityName) => {
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${newCityName}&appid=${apiKey}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?q=${newCityName}&appid=${apiKey}&units=metric`
       );
 
       if (response.status === 200) {
-        setWeatherData(response.data);
+        setCurrentWeather(response.data);
         setCityName(newCityName);
-        setCurrentWeather(null);
+        setWeatherData(null);
+        setSearchHistory([...searchHistory, response.data]);
       } else {
         console.error("Failed to fetch weather data");
       }
@@ -73,6 +75,7 @@ function App() {
       console.error("Error fetching weather data", error);
     }
   };
+
   const handleCurrentLocationClick = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -149,8 +152,7 @@ function App() {
     }
   }, [apiKey, allowLocation, defaultCity]);
 
-  console.log(hourlyWeatherData);
-  console.log();
+  console.log("asdg", searchHistory);
 
   return (
     <>
@@ -186,7 +188,10 @@ function App() {
             onCurrentLocationClick={handleCurrentLocationClick}
           />
 
-          <DataWeather hourlyWeatherData={hourlyWeatherData} />
+          <DataWeather
+            hourlyWeatherData={hourlyWeatherData}
+            currentWeather={currentWeather}
+          />
           <br />
           <DataWeatherDaily
             weatherData={weatherData}
