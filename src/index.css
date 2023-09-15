@@ -11,12 +11,50 @@ body {
   background-attachment: fixed;
 }
 :root {
-  --color-black: black;
+  --text-color-cloud: black;
+  --text-color-rain: white;
   --small-text: 15px;
-  --paragraphM: 14px;
+  --gap: 10px;
 }
 
 * {
   color: var(--color-black);
   font-family: "Roboto", sans-serif;
+}
+.rainy-background {
+  background-image: url("../src/Component/GIF/rain_wallpaper.gif");
+  & .header,
+  .weather-holder,
+  .weather-c,
+  .weather-show,
+  .weather-show-2 > p,
+  .data-show-holder > p,
+  .daily,
+  .world {
+    color: var(--text-color-rain);
+  }
+}
+.cloudy-background {
+  background-image: url("../src/Component/GIF/cloudy_wallpaper2.gif");
+  & .header,
+  .weather-holder,
+  .weather-c,
+  .weather-show,
+  .weather-show-2 > p,
+  .data-show-holder > p,
+  .daily {
+    color: var(--text-color);
+  }
+}
+.thunderstorm-background {
+  background-image: url("../src/Image/Thunder-storm.png");
+  & .header,
+  .weather-holder,
+  .weather-c,
+  .weather-show,
+  .weather-show-2 > p,
+  .data-show-holder > p,
+  .daily {
+    color: var(--text-color);
+  }
 }

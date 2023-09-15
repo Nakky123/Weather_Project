@@ -8,6 +8,9 @@
 .weather-icon {
   width: 100px;
 }
+.world {
+  cursor: pointer;
+}
 .weather-holder {
   display: flex;
   justify-content: center;

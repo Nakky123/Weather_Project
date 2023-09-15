@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Weather.css";
 import cloud from "../GIF/cloud.gif";
 import rain from "../GIF/rain.gif";
@@ -75,6 +75,7 @@ const Weather = ({
   visibility,
   iconCode,
   additionalContent,
+  onCurrentLocationClick,
 }) => {
   // Capitalize the first letter of each word in the description
   const capitalizedDescription = description
@@ -82,9 +83,49 @@ const Weather = ({
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
+  useEffect(() => {
+    // Check if it's raining or cloudy (you can modify this condition based on your weather icon codes)
+    const isRaining =
+      iconCode === "09d" ||
+      iconCode === "09n" ||
+      iconCode === "10d" ||
+      iconCode === "10n";
+    const isCloudy =
+      iconCode === "03d" ||
+      iconCode === "03n" ||
+      iconCode === "04d" ||
+      iconCode === "04n";
+    const isThunderstorm = iconCode === "11d" || iconCode === "11n";
+
+    // Add or remove the appropriate class to the body element based on the weather condition
+    if (isRaining) {
+      document.body.classList.add("rainy-background");
+      document.body.classList.remove("cloudy-background");
+      document.body.classList.remove("thunderstorm-background");
+    } else if (isCloudy) {
+      document.body.classList.add("cloudy-background");
+      document.body.classList.remove("rainy-background");
+      document.body.classList.remove("thunderstorm-background");
+    } else if (isThunderstorm) {
+      document.body.classList.add("thunderstorm-background");
+      document.body.classList.remove("rainy-background");
+      document.body.classList.remove("cloudy-background");
+    } else {
+      document.body.classList.remove("rainy-background");
+      document.body.classList.remove("cloudy-background");
+      document.body.classList.remove("thunderstorm-background");
+    }
+  }, [iconCode]);
+
   return (
     <div className="wrapper-weather">
-      <h1 className="header">{city}</h1>
+      <h1 className="header">
+        {city}{" "}
+        <i
+          className="fa-solid fa-location-dot world"
+          onClick={onCurrentLocationClick}
+        ></i>
+      </h1>
       <div className="weather-holder">
         <DataShowHolder
           iconCode={iconCode}

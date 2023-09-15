@@ -36,7 +36,7 @@ const DataShowHolder = ({ forecast }) => {
     <div className="data-show-holder">
       <p>{formatTime(hours, minutes)}</p>
       <img src={iconUrl} alt={description} />
-      <p>{forecast.main.temp.toFixed(1)}°C</p>
+      <p>{Math.round(forecast.main.temp)}°C</p>
       <p>{description}</p>
     </div>
   );
