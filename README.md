@@ -1,3 +1,7 @@
+# Product ScreenShot:
+
+![screen shot](/src/Image/product.png)
+
 # Weather App
 
 A simple weather website build with React to help you check the weather condition for different locations.
@@ -31,11 +35,9 @@ git clone https://github.com/anb-hq/AnB_Prime_Weather_Sambath_Ratanak.git
 cd AnB_Prime_Weather_Sambath_Ratanak/
 
 npm i
-
-npm install react-select
 ```
 
-2. change apikey:
+2. change apikey: `in App.jsx`
 
 ```jsx
 const apiKey = "b55ebdc22b904e591303fa9ae71ebea6";

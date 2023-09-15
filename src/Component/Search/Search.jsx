@@ -30,7 +30,7 @@ const Search = ({ onSearch }) => {
   };
 
   return (
-    <div>
+    <div className="search-box">
       <Select
         options={filteredCities}
         value={searchValue}

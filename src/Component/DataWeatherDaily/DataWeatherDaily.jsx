@@ -44,12 +44,9 @@ const DataShowHolder = ({ forecast }) => {
       <p>
         {dayOfWeek} {date}
       </p>
-
-      <p>
-        <img src={iconUrl} alt="Weather Icon" />
-        <p>{Math.round(forecast.main.temp)}°C</p>
-        <p>{forecast.weather[0].description}</p>
-      </p>
+      <img src={iconUrl} alt="Weather Icon" />
+      <p>{Math.round(forecast.main.temp)}°C</p>
+      <p>{forecast.weather[0].description}</p>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import DataWeatherDaily from "./Component/DataWeatherDaily/DataWeatherDaily";
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
+  const [currentWeather, setCurrentWeather] = useState(null);
   const [hourlyWeatherData, setHourlyWeatherData] = useState(null);
   const [cityName, setCityName] = useState("");
   const apiKey = "b55ebdc22b904e591303fa9ae71ebea6";
@@ -55,72 +56,136 @@ function App() {
     fetchHourlyWeatherData();
   }, [cityName, apiKey]);
 
-  const handleSearch = (newCityName) => {
-    setCityName(newCityName);
+  const handleSearch = async (newCityName) => {
+    try {
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/forecast?q=${newCityName}&appid=${apiKey}&units=metric`
+      );
+
+      if (response.status === 200) {
+        setWeatherData(response.data);
+        setCityName(newCityName);
+        setCurrentWeather(null);
+      } else {
+        console.error("Failed to fetch weather data");
+      }
+    } catch (error) {
+      console.error("Error fetching weather data", error);
+    }
+  };
+  const handleCurrentLocationClick = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+
+          axios
+            .get(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                setCityName(response.data.name);
+                setCurrentLocation({
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                });
+                setCurrentWeather(response.data);
+              } else {
+                console.error("Failed to fetch weather data");
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching user's location data: ", error);
+            });
+        },
+        (error) => {
+          console.error("Error getting user location", error);
+          setCityName(defaultCity);
+        }
+      );
+    }
   };
 
   useEffect(() => {
     // Fetch user's current location if they allow it
-    if (!allowLocation && "geolocation" in navigator) {
-      const allowGeoLocation = window.confirm(
-        "To get weather information for your current location, please allow access to your location."
-      );
+    if ("geolocation" in navigator) {
+      setAllowLocation(true);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
 
-      if (allowGeoLocation) {
-        setAllowLocation(true);
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setUserLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
+          axios
+            .get(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                setCityName(response.data.name);
+                setCurrentLocation({
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                });
+                setCurrentWeather(response.data);
+              } else {
+                console.error("Failed to fetch weather data");
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching user's location data: ", error);
             });
-
-            axios
-              .get(
-                `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`
-              )
-              .then((response) => {
-                if (response.status === 200) {
-                  setCityName(response.data.name);
-                  setCurrentLocation({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                  });
-                } else {
-                  console.error("Failed to fetch weather data");
-                }
-              })
-              .catch((error) => {
-                console.error("Error fetching user's location data", error);
-              });
-          },
-          (error) => {
-            console.error("Error getting user location", error);
-          }
-        );
-      } else {
-        setCityName(defaultCity);
-      }
+        },
+        (error) => {
+          console.error("Error getting user location", error);
+          setCityName(defaultCity);
+        }
+      );
     }
   }, [apiKey, allowLocation, defaultCity]);
-  console.log("Hourly Weather Data:", hourlyWeatherData);
+
+  console.log(hourlyWeatherData);
+  console.log();
 
   return (
     <>
       <Search onSearch={handleSearch} />
-      {weatherData && hourlyWeatherData && (
+      {(weatherData || currentWeather) && hourlyWeatherData && (
         <>
           <Weather
             city={cityName}
-            temperature={weatherData.list[0].main.temp}
-            description={weatherData.list[0].weather[0].description}
-            iconCode={weatherData.list[0].weather[0].icon}
-            feelsLike={weatherData.list[0].main.feels_like}
-            windSpeed={weatherData.list[0].wind.speed}
-            visibility={weatherData.list[0].visibility}
+            currentWeather={currentWeather}
+            weatherData={weatherData}
+            temperature={
+              currentWeather?.main.temp || weatherData?.list[0]?.main.temp
+            }
+            description={
+              currentWeather?.weather[0]?.description ||
+              weatherData?.list[0]?.weather[0]?.description
+            }
+            iconCode={
+              currentWeather?.weather[0]?.icon ||
+              weatherData?.list[0]?.weather[0]?.icon
+            }
+            feelsLike={
+              currentWeather?.main.feels_like ||
+              weatherData?.list[0]?.main.feels_like
+            }
+            windSpeed={
+              currentWeather?.wind.speed || weatherData?.list[0]?.wind.speed
+            }
+            visibility={
+              currentWeather?.visibility || weatherData?.list[0]?.visibility
+            }
             userLocation={userLocation}
+            onCurrentLocationClick={handleCurrentLocationClick}
           />
+
           <DataWeather hourlyWeatherData={hourlyWeatherData} />
           <br />
           <DataWeatherDaily
