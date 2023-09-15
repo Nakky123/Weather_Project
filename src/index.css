@@ -43,7 +43,7 @@ body {
   .weather-show-2 > p,
   .data-show-holder > p,
   .daily {
-    color: var(--text-color);
+    color: var(--text-color-cloud);
   }
 }
 .thunderstorm-background {
@@ -55,6 +55,6 @@ body {
   .weather-show-2 > p,
   .data-show-holder > p,
   .daily {
-    color: var(--text-color);
+    color: var(--text-color-rain);
   }
 }

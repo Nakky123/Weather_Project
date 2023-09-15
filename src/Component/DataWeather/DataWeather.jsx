@@ -1,7 +1,7 @@
 import React from "react";
 import "./DataWeather.css";
 
-const DataWeather = ({ hourlyWeatherData }) => {
+const DataWeather = ({ hourlyWeatherData, currentWeather }) => {
   // Filter the data for the next 24 hours
   const filteredHourlyData = hourlyWeatherData.list.slice(0, 24);
 
@@ -10,31 +10,36 @@ const DataWeather = ({ hourlyWeatherData }) => {
       <h2 className="daily">Hourly</h2>
       <div className="data-show-container">
         {filteredHourlyData.map((forecast, index) => (
-          <DataShowHolder key={index} forecast={forecast} />
+          <DataShowHolder
+            key={index}
+            forecast={forecast}
+            currentWeather={currentWeather}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-const DataShowHolder = ({ forecast }) => {
+const DataShowHolder = ({ forecast, currentWeather }) => {
   const { icon, description } = forecast.weather[0];
   const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
-  const dateObj = new Date(forecast.dt * 1000);
-  const hours = dateObj.getHours();
-  const minutes = dateObj.getMinutes();
+  // Extract the UTC timestamp (dt) and timezone (timezone) from the forecast data
+  const { dt, timezone } = forecast;
+  console.log(currentWeather?.timezone);
+  // Calculate the local time using provided dt and timezone
+  const timeInSecond = dt + currentWeather?.timezone;
+  const hour = Math.floor(timeInSecond / 3600);
 
-  // Function to format time
-  const formatTime = (hours, minutes) => {
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes < 10 ? `0${minutes}` : minutes}${ampm}`;
-  };
+  const period = hour % 24 < 12 ? "AM" : "PM";
+
+  const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+  const timeString = `${formattedHour} ${period}`;
 
   return (
     <div className="data-show-holder">
-      <p>{formatTime(hours, minutes)}</p>
+      <p>{timeString}</p>
       <img src={iconUrl} alt={description} />
       <p>{Math.round(forecast.main.temp)}°C</p>
       <p>{description}</p>

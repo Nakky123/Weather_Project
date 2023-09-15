@@ -2,6 +2,10 @@ import React from "react";
 import "./DataWeatherDaily.css";
 
 const DataWeatherDaily = ({ weatherData }) => {
+  if (!weatherData || !weatherData.list) {
+    return null; // Return null if weather data is not available
+  }
+
   // Filter and group the data to show data every 8 data points (3 hours)
   const filteredData = filterDataEvery8Hours(weatherData.list);
 
