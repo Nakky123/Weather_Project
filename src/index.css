@@ -30,7 +30,8 @@ body {
   .weather-show-2 > p,
   .data-show-holder > p,
   .daily,
-  .world {
+  .world,
+  .loading {
     color: var(--text-color-rain);
   }
 }
@@ -42,7 +43,8 @@ body {
   .weather-show,
   .weather-show-2 > p,
   .data-show-holder > p,
-  .daily {
+  .daily,
+  .loading {
     color: var(--text-color-cloud);
   }
 }
@@ -54,7 +56,8 @@ body {
   .weather-show,
   .weather-show-2 > p,
   .data-show-holder > p,
-  .daily {
+  .daily,
+  .loading {
     color: var(--text-color-rain);
   }
 }

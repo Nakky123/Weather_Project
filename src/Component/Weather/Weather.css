@@ -24,6 +24,11 @@
 .weather-c-1 {
   font-size: 40px;
 }
+.loading {
+  text-align: center;
+  padding-top: 200px;
+  font-size: 30px;
+}
 .weather-show {
   text-align: center;
 }

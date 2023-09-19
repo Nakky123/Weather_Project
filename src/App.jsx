@@ -6,17 +6,19 @@ import DataWeather from "./Component/DataWeather/DataWeather";
 import DataWeatherDaily from "./Component/DataWeatherDaily/DataWeatherDaily";
 
 function App() {
+  // State variables
   const [weatherData, setWeatherData] = useState(null);
   const [currentWeather, setCurrentWeather] = useState(null);
   const [hourlyWeatherData, setHourlyWeatherData] = useState(null);
   const [cityName, setCityName] = useState("");
-  const [apiKey, setApiKey] = useState("b55ebdc22b904e591303fa9ae71ebea6");
+  const apiKey = "b55ebdc22b904e591303fa9ae71ebea6";
   const [userLocation, setUserLocation] = useState(null);
   const [allowLocation, setAllowLocation] = useState(false);
   const [defaultCity] = useState("Kingdom of Cambodia");
   const [currentLocation, setCurrentLocation] = useState("");
-  const [searchHistory, setSearchHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  // UseEffect to fetch weather data based on city name
   useEffect(() => {
     async function fetchWeatherData() {
       try {
@@ -37,6 +39,7 @@ function App() {
     fetchWeatherData();
   }, [cityName, apiKey]);
 
+  // UseEffect to fetch hourly weather data based on city name
   useEffect(() => {
     async function fetchHourlyWeatherData() {
       try {
@@ -57,6 +60,7 @@ function App() {
     fetchHourlyWeatherData();
   }, [cityName, apiKey]);
 
+  // Function to handle city search
   const handleSearch = async (newCityName) => {
     try {
       const response = await axios.get(
@@ -67,7 +71,6 @@ function App() {
         setCurrentWeather(response.data);
         setCityName(newCityName);
         setWeatherData(null);
-        setSearchHistory([...searchHistory, response.data]);
       } else {
         console.error("Failed to fetch weather data");
       }
@@ -76,7 +79,10 @@ function App() {
     }
   };
 
+  // Function to handle clicking on the "Current Location" button
   const handleCurrentLocationClick = () => {
+    setLoading(true);
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -100,21 +106,24 @@ function App() {
               } else {
                 console.error("Failed to fetch weather data");
               }
+              setLoading(false);
             })
             .catch((error) => {
               console.error("Error fetching user's location data: ", error);
+              setLoading(false);
             });
         },
         (error) => {
           console.error("Error getting user location", error);
           setCityName(defaultCity);
+          setLoading(false);
         }
       );
     }
   };
 
+  // UseEffect to fetch user's current location data and weather data if allowed
   useEffect(() => {
-    // Fetch user's current location if they allow it
     if ("geolocation" in navigator) {
       setAllowLocation(true);
       navigator.geolocation.getCurrentPosition(
@@ -152,8 +161,7 @@ function App() {
     }
   }, [apiKey, allowLocation, defaultCity]);
 
-  console.log("asdg", searchHistory);
-
+  // Render the UI
   return (
     <>
       <Search onSearch={handleSearch} />
@@ -187,16 +195,23 @@ function App() {
             userLocation={userLocation}
             onCurrentLocationClick={handleCurrentLocationClick}
           />
-
-          <DataWeather
-            hourlyWeatherData={hourlyWeatherData}
-            currentWeather={currentWeather}
-          />
-          <br />
-          <DataWeatherDaily
-            weatherData={weatherData}
-            userLocation={userLocation}
-          />
+          {loading ? (
+            <p className="loading">Loading...</p>
+          ) : (
+            <>
+              {" "}
+              {/* Conditional rendering based on loading state */}
+              <DataWeather
+                hourlyWeatherData={hourlyWeatherData}
+                currentWeather={currentWeather}
+              />
+              <br />
+              <DataWeatherDaily
+                weatherData={weatherData}
+                userLocation={userLocation}
+              />
+            </>
+          )}
           <footer></footer>
         </>
       )}
